@@ -1,0 +1,1041 @@
+html_content = """<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BotanIQ - Virtual Plant Care Reminders</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --sage-green: #87A96B;
+            --sage-dark: #6E8F53;
+            --deep-moss: #2C4A3E;
+            --warm-cream: #F5F2EB;
+            --card-bg: #FFFFFF;
+            --soft-terracotta: #D48C7B;
+            --text-main: #2C4A3E;
+            --text-muted: #6B7C75;
+            --border-color: #E2DDD5;
+            --shadow: 0 10px 30px -5px rgba(44, 74, 62, 0.08);
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        [data-theme="dark"] {
+            --sage-green: #739455;
+            --sage-dark: #87A96B;
+            --deep-moss: #E2DDD5;
+            --warm-cream: #1A2822;
+            --card-bg: #22332B;
+            --soft-terracotta: #E09C8C;
+            --text-main: #F5F2EB;
+            --text-muted: #A3B1AA;
+            --border-color: #314A3E;
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--warm-cream);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--sage-green);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(135, 169, 107, 0.3);
+        }
+
+        .logo h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            background: var(--sage-green);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(135, 169, 107, 0.2);
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--sage-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(135, 169, 107, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: rgba(135, 169, 107, 0.1);
+            border-color: var(--sage-green);
+            color: var(--sage-green);
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .icon-btn:hover {
+            background: rgba(135, 169, 107, 0.1);
+            border-color: var(--sage-green);
+            color: var(--sage-green);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dashboard-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.3rem;
+        }
+
+        .dashboard-title p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.2rem 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--sage-green);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-icon.primary { background: rgba(135, 169, 107, 0.15); color: var(--sage-green); }
+        .stat-icon.warning { background: rgba(212, 140, 123, 0.15); color: var(--soft-terracotta); }
+        .stat-icon.success { background: rgba(44, 74, 62, 0.15); color: var(--deep-moss); }
+        [data-theme="dark"] .stat-icon.success { background: rgba(226, 221, 213, 0.15); color: var(--warm-cream); }
+
+        .stat-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .stat-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--sage-green);
+            box-shadow: 0 0 0 3px rgba(135, 169, 107, 0.15);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .filter-tag {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .filter-tag.active, .filter-tag:hover {
+            background: var(--sage-green);
+            color: white;
+            border-color: var(--sage-green);
+        }
+
+        .plants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .plant-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .plant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px -5px rgba(44, 74, 62, 0.12);
+            border-color: var(--sage-green);
+        }
+
+        .plant-img-container {
+            height: 180px;
+            position: relative;
+            background: #E8E3D9;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .plant-img-container {
+            background: #2A3D34;
+        }
+
+        .plant-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .plant-card:hover .plant-img-container img {
+            transform: scale(1.05);
+        }
+
+        .plant-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--deep-moss);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .plant-badge.urgent {
+            background: rgba(212, 140, 123, 0.9);
+            color: white;
+        }
+
+        .plant-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .plant-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            color: var(--text-main);
+        }
+
+        .plant-species {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .plant-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .plant-details span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .plant-details i {
+            color: var(--sage-green);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .btn-water {
+            flex: 1;
+            background: rgba(135, 169, 107, 0.15);
+            color: var(--sage-green);
+            border: none;
+            padding: 0.6rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .btn-water:hover {
+            background: var(--sage-green);
+            color: white;
+        }
+
+        .btn-delete {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-delete:hover {
+            background: rgba(212, 140, 123, 0.15);
+            border-color: var(--soft-terracotta);
+            color: var(--soft-terracotta);
+        }
+
+        /* Modal Styles */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-backdrop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            padding: 2rem;
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-backdrop.show .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--text-main);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text-main);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--warm-cream);
+            color: var(--text-main);
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--sage-green);
+            box-shadow: 0 0 0 3px rgba(135, 169, 107, 0.15);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--sage-green);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--card-bg);
+            margin-top: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container { padding: 1rem; }
+            main { padding: 0 1rem; }
+            .dashboard-header { flex-direction: column; align-items: flex-start; }
+            .filter-section { flex-direction: column; align-items: stretch; }
+            .search-bar { max-width: 100%; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fa-solid.fa-seedling fa-solid fa-seedling"></i>
+                </div>
+                <h1>BotanIQ</h1>
+            </a>
+            <div class="header-actions">
+                <button class="icon-btn" id="themeToggle" title="Ganti Tema">
+                    <i class="fa-solid fa-moon" id="themeIcon"></i>
+                </button>
+                <button class="btn" id="openAddModal">
+                    <i class="fa-solid fa-plus"></i> Tambah Tanaman
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="dashboard-header">
+            <div class="dashboard-title">
+                <h2>Kebun Digital Anda</h2>
+                <p>Pantau kesehatan dan jadwal perawatan tanaman hias dengan mudah.</p>
+            </div>
+            <button class="btn btn-outline" id="loadPresetBtn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Muat Contoh Tanaman
+            </button>
+        </div>
+
+        <!-- Statistics Widget -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon primary">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalPlants">0</h3>
+                    <p>Total Tanaman</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon warning">
+                    <i class="fa-solid fa-droplet"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="needsWater">0</h3>
+                    <p>Butuh Disiram Hari Ini</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon success">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="healthyCount">0</h3>
+                    <p>Tanaman Sehat</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search & Filters -->
+        <div class="filter-section">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Cari nama tanaman...">
+            </div>
+            <div class="filter-tags">
+                <div class="filter-tag active" data-filter="all">Semua</div>
+                <div class="filter-tag" data-filter="urgent">Perlu Disiram</div>
+                <div class="filter-tag" data-filter="healthy">Sehat</div>
+            </div>
+        </div>
+
+        <!-- Plants Grid Container -->
+        <div class="plants-grid" id="plantsGrid">
+            <!-- Dynamic JavaScript content renders here -->
+        </div>
+    </main>
+
+    <!-- Add Plant Modal -->
+    <div class="modal-backdrop" id="addModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Tambah Tanaman Baru</h3>
+                <button class="modal-close" id="closeAddModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="addPlantForm">
+                <div class="form-group">
+                    <label for="plantName">Nama Panggilan Tanaman</label>
+                    <input type="text" id="plantName" required placeholder="Contoh: Monstera Ruang Tamu">
+                </div>
+                <div class="form-group">
+                    <label for="plantSpecies">Jenis / Spesies</label>
+                    <input type="text" id="plantSpecies" required placeholder="Contoh: Monstera Deliciosa">
+                </div>
+                <div class="form-group">
+                    <label for="waterInterval">Interval Penyiraman (Hari)</label>
+                    <select id="waterInterval" required>
+                        <option value="3">Setiap 3 Hari (Sangat Suka Air)</option>
+                        <option value="5">Setiap 5 Hari (Sedang)</option>
+                        <option value="7" selected>Setiap 7 Hari (1 Minggu Sekali)</option>
+                        <option value="14">Setiap 14 Hari (2 Minggu Sekali)</option>
+                        <option value="30">Setiap 30 Hari (Kaktus/Sukulen)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="plantImage">URL Foto Tanaman (Opsional)</label>
+                    <input type="url" id="plantImage" placeholder="https://images.unsplash.com/photo-...">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="cancelModal">Batal</button>
+                    <button type="submit" class="btn">Simpan Tanaman</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 BotanIQ - Virtual Plant Care Reminders. Dibuat dengan cinta untuk para pecinta tanaman.</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // State Management & LocalStorage
+        let plants = JSON.parse(localStorage.getItem('botaniq_plants')) || [];
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        // DOM Elements
+        const plantsGrid = document.getElementById('plantsGrid');
+        const totalPlantsEl = document.getElementById('totalPlants');
+        const needsWaterEl = document.getElementById('needsWater');
+        const healthyCountEl = document.getElementById('healthyCount');
+        const searchInput = document.getElementById('searchInput');
+        const filterTags = document.querySelectorAll('.filter-tag');
+        
+        // Modal Elements
+        const addModal = document.getElementById('addModal');
+        const openAddModalBtn = document.getElementById('openAddModal');
+        const closeAddModalBtn = document.getElementById('closeAddModal');
+        const cancelModalBtn = document.getElementById('cancelModal');
+        const addPlantForm = document.getElementById('addPlantForm');
+        
+        // Theme Elements
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const bodyEl = document.body;
+        const loadPresetBtn = document.getElementById('loadPresetBtn');
+
+        // Preset data for demo
+        const defaultPresets = [
+            {
+                id: 1,
+                name: "Monstera King",
+                species: "Monstera Deliciosa",
+                interval: 7,
+                lastWatered: new Date().toISOString(),
+                image: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 2,
+                name: "Kaktus Sudut",
+                species: "Echinocactus grusonii",
+                interval: 14,
+                lastWatered: new Date(Date.now() - 15 * 86400000).toISOString(),
+                image: "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 3,
+                name: "Sirih Gading",
+                species: "Epipremnum aureum",
+                interval: 5,
+                lastWatered: new Date(Date.now() - 2 * 86400000).toISOString(),
+                image: "https://images.unsplash.com/photo-1598880940371-c756e015cc11?auto=format&fit=crop&w=600&q=80"
+            }
+        ];
+
+        // Initialize App
+        function initApp() {
+            renderPlants();
+            updateStats();
+            
+            // Check saved theme
+            const savedTheme = localStorage.getItem('botaniq_theme') || 'light';
+            bodyEl.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        // Calculate days remaining until next watering
+        function getDaysRemaining(lastWateredDate, interval) {
+            const last = new Date(lastWateredDate);
+            const nextWateringDate = new Date(last.getTime() + interval * 24 * 60 * 60 * 1000);
+            const today = new Date();
+            
+            // Reset time part for accurate day calculation
+            nextWateringDate.setHours(0,0,0,0);
+            today.setHours(0,0,0,0);
+            
+            const diffTime = nextWateringDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        // Render Plant Cards
+        function renderPlants() {
+            let filtered = plants.filter(plant => {
+                const matchesSearch = plant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      plant.species.toLowerCase().includes(searchQuery.toLowerCase());
+                
+                const daysLeft = getDaysRemaining(plant.lastWatered, plant.interval);
+                
+                if (currentFilter === 'urgent') {
+                    return matchesSearch && daysLeft <= 0;
+                } else if (currentFilter === 'healthy') {
+                    return matchesSearch && daysLeft > 0;
+                }
+                return matchesSearch;
+            });
+
+            // Smart sorting: urgent plants first
+            filtered.sort((a, b) => {
+                const daysA = getDaysRemaining(a.lastWatered, a.interval);
+                const daysB = getDaysRemaining(b.lastWatered, b.interval);
+                return daysA - daysB;
+            });
+
+            if (filtered.length === 0) {
+                plantsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-seedling"></i>
+                        <h3>Tidak ada tanaman ditemukan</h3>
+                        <p>Tambahkan tanaman pertama Anda untuk mulai merawat!</p>
+                        <button class="btn" onclick="openModal()">Tambah Tanaman</button>
+                    </div>
+                `;
+                return;
+            }
+
+            plantsGrid.innerHTML = filtered.map(plant => {
+                const daysLeft = getDaysRemaining(plant.lastWatered, plant.interval);
+                let badgeText = '';
+                let badgeClass = '';
+
+                if (daysLeft < 0) {
+                    badgeText = `Terlambat ${Math.abs(daysLeft)} hari!`;
+                    badgeClass = 'urgent';
+                } else if (daysLeft === 0) {
+                    badgeText = 'Waktunya disiram hari ini!';
+                    badgeClass = 'urgent';
+                } else {
+                    badgeText = `Siram dalam ${daysLeft} hari`;
+                    badgeClass = '';
+                }
+
+                const defaultImg = "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=600&q=80";
+                const plantImg = plant.image && plant.image.trim() !== '' ? plant.image : defaultImg;
+
+                return `
+                    <div class="plant-card">
+                        <div class="plant-img-container">
+                            <img src="${plantImg}" alt="${plant.name}" onerror="this.src='${defaultImg}'">
+                            <div class="plant-badge ${badgeClass}">${badgeText}</div>
+                        </div>
+                        <div class="plant-content">
+                            <h3 class="plant-name">${plant.name}</h3>
+                            <p class="plant-species">${plant.species}</p>
+                            <div class="plant-details">
+                                <span><i class="fa-regular fa-clock"></i> Tiap ${plant.interval} hari</span>
+                                <span><i class="fa-solid fa-droplet"></i> Interval Air</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-water" onclick="waterPlant(${plant.id})">
+                                    <i class="fa-solid fa-droplet"></i> Sudah Disiram
+                                </button>
+                                <button class="btn-delete" onclick="deletePlant(${plant.id})" title="Hapus Tanaman">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update Dashboard Statistics
+        function updateStats() {
+            totalPlantsEl.textContent = plants.length;
+            
+            let urgentCount = 0;
+            let healthyCount = 0;
+
+            plants.forEach(plant => {
+                const daysLeft = getDaysRemaining(plant.lastWatered, plant.interval);
+                if (daysLeft <= 0) {
+                    urgentCount++;
+                } else {
+                    healthyCount++;
+                }
+            });
+
+            needsWaterEl.textContent = urgentCount;
+            healthyCountEl.textContent = healthyCount;
+        }
+
+        // Action: Water Plant (Reset date)
+        window.waterPlant = function(id) {
+            plants = plants.map(plant => {
+                if (plant.id === id) {
+                    return { ...plant, lastWatered: new Date().toISOString() };
+                }
+                return plant;
+            });
+            saveAndRefresh();
+        }
+
+        // Action: Delete Plant
+        window.deletePlant = function(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus tanaman ini dari kebun?")) {
+                plants = plants.filter(plant => plant.id !== id);
+                saveAndRefresh();
+            }
+        }
+
+        // Save to LocalStorage & Refresh UI
+        function saveAndRefresh() {
+            localStorage.setItem('botaniq_plants', JSON.stringify(plants));
+            renderPlants();
+            updateStats();
+        }
+
+        // Modal Controls
+        function openModal() {
+            addModal.classList.add('show');
+        }
+
+        function closeModalFunc() {
+            addModal.classList.remove('show');
+            addPlantForm.reset();
+        }
+
+        openAddModalBtn.addEventListener('click', openModal);
+        closeAddModalBtn.addEventListener('click', closeModalFunc);
+        cancelModalBtn.addEventListener('click', closeModalFunc);
+        addModal.addEventListener('click', (e) => {
+            if (e.target === addModal) closeModalFunc();
+        });
+
+        // Add Plant Form Submission
+        addPlantForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newPlant = {
+                id: Date.now(),
+                name: document.getElementById('plantName').value,
+                species: document.getElementById('plantSpecies').value,
+                interval: parseInt(document.getElementById('waterInterval').value),
+                lastWatered: new Date().toISOString(),
+                image: document.getElementById('plantImage').value
+            };
+
+            plants.push(newPlant);
+            saveAndRefresh();
+            closeModalFunc();
+        });
+
+        // Load Preset Demo Data
+        loadPresetBtn.addEventListener('click', () => {
+            if (plants.length > 0 && !confirm("Muat contoh tanaman akan menambahkan data baru ke kebun Anda. Lanjutkan?")) {
+                return;
+            }
+            plants = [...defaultPresets];
+            saveAndRefresh();
+        });
+
+        // Search & Filter Listeners
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderPlants();
+        });
+
+        filterTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                filterTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                currentFilter = tag.getAttribute('data-filter');
+                renderPlants();
+            });
+        });
+
+        // Theme Toggle Logic
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = bodyEl.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            bodyEl.setAttribute('data-theme', newTheme);
+            localStorage.setItem('botaniq_theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.className = "fa-solid fa-sun";
+            } else {
+                themeIcon.className = "fa-solid fa-moon";
+            }
+        }
+
+        // Run initialization on load
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
+"""
+
+with open("botaniq.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+print("File botaniq.html berhasil dibuat.")
